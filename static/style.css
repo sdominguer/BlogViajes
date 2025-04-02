@@ -1,0 +1,318 @@
+/* Navbar Styles */
+.navbar {
+    background-color: #2E5362; /* Azul Oscuro */
+    color: white;
+    padding: 30px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-logo a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-links a {
+    color: #9ABBC7; /* Azul Medio (enlaces) */
+    text-decoration: none;
+    margin-left: 20px;
+    transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+    color: #7E9DA9; /* Azul Medio/Grisáceo (hover) */
+}
+
+/* Sección Hero (modificada) */
+/* Sección Hero (modificada para Bootstrap - con ajustes) */
+.hero {
+    position: relative;
+    height: calc(100vh - 56px);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.hero-content {
+    padding: 20px;
+    position: relative;
+    /* Ancho máximo del contenido */
+    max-width: 350px;
+    margin: 0 auto;
+    box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
+}
+
+.hero-text-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: -1;
+    border-radius: 10px;
+}
+
+.hero-welcome img {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+.hero-welcome h2 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #2E5362;
+}
+
+.hero-welcome p {
+    font-size: 1.2em;
+    color: #7E9DA9;
+}
+
+/* Sección Featured Post */
+.featured-post {
+    padding: 20px;
+    background-color: #CFDBE4; /* Azul Muy Claro/Grisáceo */
+    text-align: center;
+}
+
+.featured-post h2 {
+    color: #2E5362; /* Azul Oscuro */
+}
+
+.post-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Añade margen a las columnas */
+.col-md-4 {
+    margin-bottom: 35px; /* Agrega un margen inferior de 20px */
+    padding-left: 10px; /* Opcional: para espaciar las cards de los bordes */
+    padding-right: 10px; /* Opcional: para espaciar las cards de los bordes */
+
+}
+
+.post-preview img {
+    width: 300px;
+    margin-right: 20px;
+}
+
+.post-details {
+    text-align: left;
+}
+
+.post-date {
+    font-size: 0.8em;
+    color: #7E9DA9; /* Azul Medio/Grisáceo */
+}
+
+.post-details h3 {
+    color: #2E5362; /* Azul Oscuro */
+}
+
+.post-excerpt {
+    color: #7E9DA9; /* Azul Medio/Grisáceo */
+}
+
+/* Estilos generales para el texto */
+body {
+    color: #7E9DA9; /* Azul Medio/Grisáceo (texto general) */
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+}
+
+
+/* Sección Recent Posts */
+.recent-posts {
+    background-color: #CFDBE4; /* Azul Muy Claro/Grisáceo */
+    text-align: center;
+    
+}
+
+.recent-posts h2 {
+    color: #2E5362; /* Azul Oscuro */
+    margin-bottom: 30px;
+}
+
+.card {
+    border: none; /* Elimina el borde de las cards */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Agrega una sombra sutil */
+    transition: transform 0.3s ease; /* Agrega una transición suave al hacer hover */
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Eleva la card al hacer hover */
+}
+
+.card-img-top {
+    border-radius: 0; /* Elimina los bordes redondeados de la imagen */
+}
+
+.card-body {
+    text-align: left;
+}
+
+.card-title {
+    color: #2E5362; /* Azul Oscuro */
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    color: #7E9DA9; /* Azul Medio/Grisáceo */
+}
+
+.btn-primary {
+    background-color: #9ABBC7; /* Azul Medio */
+    border-color: #9ABBC7; /* Azul Medio */
+}
+
+.btn-primary:hover {
+    background-color: #7E9DA9; /* Azul Medio/Grisáceo */
+    border-color: #7E9DA9; /* Azul Medio/Grisáceo */
+}
+
+/* Sección de Estadísticas de Viaje */
+.travel-stats {
+    background-color: #618B97; /* Azul Oscuro/Grisáceo (uno de los colores de tu paleta) */
+    color: white;
+    text-align: center;
+}
+
+.travel-stats .container {
+    max-width: 960px; /* Ancho máximo del contenedor */
+}
+
+.stat {
+    padding: 30px;
+}
+
+.stat-number {
+    font-size: 3em;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-size: 1.2em;
+    display: block;
+}
+
+/* Barra de Redes Sociales */
+.social-bar {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    z-index: 100; /* Asegura que esté por encima del resto del contenido */
+}
+
+.social-icon {
+    color: white;
+    background-color: #9ABBC7; /* Azul Medio */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: #7E9DA9; /* Azul Medio/Grisáceo */
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #2E5362; /* Azul Oscuro/Grisáceo (mismo color que el navbar) */
+    color: white;
+    padding: 30px 0; /* Aumenta el padding vertical */
+    text-align: center;
+    font-size: 1.2em; /* Aumenta el tamaño de la fuente */
+}
+
+/* Sección del Mapa de Países Visitados */
+.visited-countries {
+    background-color: #CFDBE4;
+    text-align: center;
+    padding: 20px;
+}
+
+.visited-countries h2 {
+    color: #2E5362;
+    margin-bottom: 20px;
+}
+/*Estilos para Mapa*/
+.map-container {
+  position: relative;
+  width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+  max-width: 800px; /* Ajusta el ancho máximo según sea necesario */
+  margin: 0 auto; /* Centra el mapa */
+}
+
+.map-container img {
+  width: 100%; /* La imagen se ajustará al ancho del contenedor */
+  height: auto; /* Mantiene la proporción original de la imagen */
+}
+
+.country-button {
+    position: absolute; /* Permite posicionar los botones sobre la imagen */
+    background: none; /* Elimina el fondo por defecto del enlace */
+    border: none; /* Elimina el borde por defecto del enlace */
+    padding: 0; /* Elimina el espacio interno por defecto del enlace */
+    cursor: pointer; /* Cambia el cursor a una mano al pasar por encima */
+    text-decoration: none; /* Elimina el subrayado de los enlaces */
+    color: inherit; /* Hereda el color del texto del padre (opcional) */
+    /* Posiciona el botón */
+    top: 47%;  /* Ajusta la posición vertical */
+    left: 21%; /* Ajusta la posición horizontal */
+  }
+
+  .country-button img{
+    position: absolute; /* Permite posicionar los botones sobre la imagen */
+    background: none; /* Elimina el fondo por defecto del enlace */
+    border: none; /* Elimina el borde por defecto del enlace */
+    padding: 0; /* Elimina el espacio interno por defecto del enlace */
+    cursor: pointer; /* Cambia el cursor a una mano al pasar por encima */
+    text-decoration: none; /* Elimina el subrayado de los enlaces */
+    color: inherit; /* Hereda el color del texto del padre (opcional) */
+    /* Posiciona el botón */
+    width: 100%;
+    top: 0;  /* Ajusta la posición vertical */
+    left: 0%; /* Ajusta la posición horizontal */
+}
