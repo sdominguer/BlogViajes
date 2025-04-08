@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Página "About Me" -->
+    <section class="page py-5">
+                <h2>About Me</h2>
+                <hr class="title-divider">
+        <div class="container">
+            <div class="about-container row">
+                <div class="col-md-6">
+                    <img src="{{ url_for('static', filename='images/aboutme.png') }}" alt="Mi Foto" class="img-fluid rounded about-image">
+                </div>
+                <div class="col-md-6 about-text">
+                    <h3>¡Hey, thanks for dropping by!</h3>
+                    <p class="long-text">Soy [Tu Nombre], un apasionado viajero y fotógrafo con el objetivo de convertir cada rincón del planeta en una historia visual. Tras años de planificación y ahorros, me lancé a la aventura recorriendo 98 países en 7 continentes. En este blog, comparto mis historias, consejos y fotografías con la esperanza de inspirarte a perseguir tus propios sueños de viaje.</p>
+                    <p class="long-text">Soy [Tu Nombre], un apasionado viajero y fotógrafo con el objetivo de convertir cada rincón del planeta en una historia visual. Tras años de planificación y ahorros, me lancé a la aventura recorriendo 98 países en 7 continentes. En este blog, comparto mis historias, consejos y fotografías con la esperanza de inspirarte a perseguir tus propios sueños de viaje.</p>
+                    
+                    <p>¡Acompáñame en esta increíble aventura!</p>
+                    <a href="#" class="btn btn-primary">Let's Work Together</a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
