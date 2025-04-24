@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Página "Work With Me" -->
+    <section class="work-with-me py-5">
+        <div class="container">
+            <!-- Título principal centrado -->
+            <h2 class="main-title">Work With Me</h2>
+
+            <!-- Subtítulo y tarjetas -->
+
+            <div class="collab-grid">
+                <div class="collab-card">Reseñas de productos y servicios</div>
+                <div class="collab-card">Creación de contenido patrocinado</div>
+                <div class="collab-card">Viajes de prensa</div>
+                <div class="collab-card">Embajador de marca</div>
+            </div>
+
+            <!-- Formulario -->
+            <div class="container-form mt-5">
+                <h3 class="section-subtitle">Contact Me</h3>
+
+                {{ form.hidden_tag() }}
+                
+                {{ form.name.label(class="form-control-label") }}
+                {{ form.name(class="form-control") }}
+                
+                {{ form.email.label(class="form-control-label") }}
+                {{ form.email(class="form-control") }}
+                
+                {{ form.message.label(class="form-control-label") }}
+                {{ form.message(class="form-control", rows="5") }}
+                
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </div>
+    </section>
+{% endblock %}
