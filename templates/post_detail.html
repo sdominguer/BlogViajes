@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ post.title }}</h1>
+        <p><strong>Publicado en:</strong> {{ post.date_posted.strftime('%d/%m/%Y') }}</p>
+        <img src="{{ url_for('static', filename='post_images/' + post.image_file) }}" alt="Imagen del post" class="img-fluid mb-4">
+        <p>{{ post.content }}</p>
+
+        <h2>Recomendaciones:</h2>
+        <div>
+            {% for rec in post.recommendations %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p><strong>Tipo:</strong> {{ rec.recommendation_type }}</p>
+                        <p><strong>Comentario:</strong> {{ rec.comment }}</p>
+                        <p><strong>Contacto:</strong> {{ rec.contact }}</p>
+                        <p><strong>Precio:</strong> {{ rec.price }}</p>
+                        <p><strong>Calificación:</strong> {{ rec.rating }}</p>
+                    </div>
+                </div>
+            {% else %}
+                <p>No hay recomendaciones para este post.</p>
+            {% endfor %}
+        </div>
+
+        <a href="{{ url_for('blog') }}" class="btn btn-secondary mt-4">Volver al Blog</a>
+    </div>
+{% endblock %}

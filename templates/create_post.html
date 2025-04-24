@@ -28,7 +28,11 @@
 
         <div class="form-group">
             <label for="selectOptions">Tipo de Recomendación:</label>
-            <select id="selectOptions" class="form-control"></select>
+            <select id="selectOptions" class="form-control">
+                {% for tipo, nombre in tipos_recomendacion %}
+                    <option value="{{ tipo }}">{{ nombre }}</option>
+                {% endfor %}
+            </select>
         </div>
 
         <div class="form-group">

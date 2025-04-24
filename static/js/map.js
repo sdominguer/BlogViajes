@@ -1,79 +1,43 @@
-// static/js/map.js
-document.addEventListener('DOMContentLoaded', function() {
-    const btnAddRecomendacion = document.getElementById('Addrecommendation');
-    const btnGuardarJson = document.getElementById('CrearPost');
-    const templateRecomendacion = document.getElementById('recommendation-template');
-    const jsonResult = document.getElementById('recommendations_json');
-    const contenedorRecomendaciones = document.getElementById('recommendation-container');
-    const selectOptions = document.getElementById('selectOptions');
+document.addEventListener('DOMContentLoaded', () => {
+    const recommendationContainer = document.getElementById('recommendation-container');
+    const addBtn = document.getElementById('Addrecommendation');
+    const recommendationsInput = document.getElementById('recommendations_json');
+    const recommendationTemplate = document.getElementById('recommendation-template');
 
-    const TYPES_RECOMMENDATION = [
-        "Hotel",
-        "Restaurante",
-        "Lugar",
-        "Actividad"
-    ];
-    let dataRecomendation = [];
+    addBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const clone = recommendationTemplate.content.cloneNode(true);
+        const select = clone.querySelector('.recommendation-type');
 
-    const addOption = () => {
-          TYPES_RECOMMENDATION.forEach(TYPE =>{
-            const newOption = document.createElement('option')
-          newOption.value = TYPE;
-        newOption.textContent = TYPE
-              selectOptions.appendChild(newOption);
-        })
-    }
-    const render = () => {
-        limpiarHTML();
-        dataRecomendation.forEach(element => {
-            const html = templateRecomendacion.content.cloneNode(true);
-            html.querySelector('span.text').textContent = "Tipo de Recomendacion: " + element.recommendation_type;
-            html.querySelector('span.text').textContent = html.querySelector('span.text').textContent + " Comentario: " + element.comment;
-            html.querySelector('span.text').textContent = html.querySelector('span.text').textContent + " Contacto: " + element.contact;
-            html.querySelector('span.text').textContent = html.querySelector('span.text').textContent + " Ratting: " + element.rating;
-              html.querySelector('span.text').textContent = html.querySelector('span.text').textContent + " Price: " + element.price;
-            contenedorRecomendaciones.appendChild(html)
-        })
-    }
-   
-    const limpiarHTML = () => {
-        while (contenedorRecomendaciones.firstChild) {
-            contenedorRecomendaciones.removeChild(contenedorRecomendaciones.firstChild);
-        }
-    }
-    const saveData = () => {
-        jsonResult.value = JSON.stringify(dataRecomendation);
-    }
-         addOption();
-    btnAddRecomendacion.addEventListener('click', (event) => {
-        event.preventDefault();
-        const recommendation_type = document.querySelector('#selectOptions').value;
-        const comment = document.querySelector('#comment').value;
-        const rating = document.querySelector('#rating').value;
-        const contact = document.querySelector('#contact').value;
-        const price = document.querySelector('#price').value;
+        // Opciones fijas (puedes cambiarlas si quieres)
+        const options = ["Plomero", "Cerrajero", "Electricista", "Veterinario"];
+        options.forEach(opt => {
+            const optionElement = document.createElement("option");
+            optionElement.value = opt;
+            optionElement.textContent = opt;
+            select.appendChild(optionElement);
+        });
 
-        if (recommendation_type === "") {
-            alert("El nombre del archivo es obligatorio")
-            return;
-        }
-        if (comment === "") {
-            alert("La descripción es obligatorio")
-            return;
-        }
-
-        const recommendation = {
-            recommendation_type,
-            comment,
-            rating,
-            contact,
-            price
-        }
-        dataRecomendation = [...dataRecomendation, recommendation];
-        render()
-
+        recommendationContainer.appendChild(clone);
     });
-    btnGuardarJson.addEventListener('click', () => {
-        saveData();
+
+    const form = document.querySelector('form');
+    form.addEventListener('submit', () => {
+        const recommendations = [];
+        const cards = recommendationContainer.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            const type = card.querySelector('.recommendation-type').value;
+            const comment = card.querySelector('.comment').value;
+            const contact = card.querySelector('.contact').value;
+            const price = card.querySelector('.price').value;
+            const rating = parseInt(card.querySelector('.rating').value);
+
+            if (type && comment && contact && price && rating >= 1 && rating <= 5) {
+                recommendations.push({ type, comment, contact, price, rating });
+            }
+        });
+
+        recommendationsInput.value = JSON.stringify(recommendations);
     });
 });
