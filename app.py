@@ -9,10 +9,14 @@ import os
 import secrets
 from flask_mail import Mail, Message
 from sqlalchemy.orm import relationship
+from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'tu_clave_secreta'  # Cambia esto a una clave secreta adecuada
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'  # Archivo de la base de datos SQLite
+
+app.config['UPLOAD_FOLDER'] = 'static/post_images'
 
 # Config de los Emails
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -178,27 +182,53 @@ def create_post():
     return render_template('create_post.html', form=form, tipos_recomendacion=tipos_recomendacion)
 
 # Ruta para editar un post
-@app.route('/post/<int:post_id>/edit', methods=['GET', 'POST'])
+@app.route("/post/<int:post_id>/edit", methods=['GET', 'POST'])
 def edit_post(post_id):
-    if 'admin_logged_in' not in session:  # Verifica si el admin está logueado
-        flash('Necesitas iniciar sesión para editar un post', 'danger')
-        return redirect(url_for('admin_login'))
-
     post = Post.query.get_or_404(post_id)
     form = PostForm()
 
     if form.validate_on_submit():
+        # Actualizar los datos del post
         post.title = form.title.data
         post.content = form.content.data
-        if form.image_file.data:
-            picture_file = save_picture(form.image_file.data)
-            post.image_file = picture_file
-        db.session.commit()
-        flash('Post actualizado exitosamente', 'success')
-        return redirect(url_for('index'))  # Redirige a la página principal
 
-    form.title.data = post.title
-    form.content.data = post.content
+        # Si se subió una nueva imagen
+        if form.image_file.data:
+            # Guardar la nueva imagen
+            image_file = form.image_file.data
+            filename = secure_filename(image_file.filename)
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            image_file.save(image_path)
+            post.image_file = filename
+
+        # Actualizar cada recomendación existente
+        for idx, recommendation in enumerate(post.recommendations, start=1):
+            recommendation.recommendation_type = request.form.get(f'recommendation_type_{idx}')
+            recommendation.comment = request.form.get(f'comment_{idx}')
+            recommendation.rating = int(request.form.get(f'rating_{idx}', 1))
+            recommendation.contact = request.form.get(f'contact_{idx}')
+            recommendation.price = request.form.get(f'price_{idx}')
+
+        # Añadir nueva recomendación si hay datos
+        if request.form.get('comment_new') and request.form.get('rating_new'):
+            new_recommendation = Recommendation(
+                recommendation_type=request.form.get('recommendation_type_new'),
+                comment=request.form.get('comment_new'),
+                rating=int(request.form.get('rating_new')),
+                contact=request.form.get('contact_new'),
+                price=request.form.get('price_new'),
+                post=post
+            )
+            db.session.add(new_recommendation)
+
+        db.session.commit()
+        flash('El post fue actualizado exitosamente.', 'success')
+        return redirect(url_for('post_detail', post_id=post.id))
+
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.content.data = post.content
+
     return render_template('edit_post.html', form=form, post=post)
 
 # Ruta para eliminar un post

@@ -25,50 +25,64 @@
         <hr>
 
         <h4>Recomendaciones</h4>
+        
+        <!-- Aquí se agregarán dinámicamente las recomendaciones -->
+        <div id="recommendations-container"></div>
 
-        <div class="form-group">
-            <label for="selectOptions">Tipo de Recomendación:</label>
-            <select id="selectOptions" class="form-control">
-                {% for tipo, nombre in tipos_recomendacion %}
-                    <option value="{{ tipo }}">{{ nombre }}</option>
-                {% endfor %}
-            </select>
-        </div>
+        <!-- Este input oculto guarda cuántas recomendaciones se agregan -->
+        <input type="hidden" id="num_recommendations" name="num_recommendations" value="0">
 
-        <div class="form-group">
-            <label for="comment">Comentario:</label>
-            <input type="text" class="form-control" id="comment">
-        </div>
+        <!-- Botón para agregar recomendaciones -->
+        <button type="button" class="btn btn-secondary mt-2" onclick="addRecommendation()">Agregar Recomendación</button>
 
-        <div class="form-group">
-            <label for="contact">Contacto:</label>
-            <input type="text" class="form-control" id="contact">
-        </div>
+        <hr>
 
-        <div class="form-group">
-            <label for="price">Precio:</label>
-            <input type="text" class="form-control" id="price">
-        </div>
-
-        <div class="form-group">
-            <label for="rating">Rating:</label>
-            <input type="number" class="form-control" id="rating" min="1" max="5">
-        </div>
-
-        <button id="Addrecommendation" class="btn btn-secondary">Añadir Recomendación</button>
-
-        <input type="hidden" id="recommendations_json" name="recommendations_json">
-        <div id="recommendation-container" class="mt-3"></div>
-
-        <template id="recommendation-template">
-            <div class="alert alert-info mt-2">
-                <span class="text"></span>
-            </div>
-        </template>
-
-        <button id="CrearPost" type="submit" class="btn btn-primary mt-4">{{ form.submit.label.text }}</button>
+        {{ form.submit(class="btn btn-primary") }}
     </form>
 </div>
 
-<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script>
+let recommendationCount = 0;
+
+function addRecommendation() {
+    const container = document.getElementById('recommendations-container');
+
+    const div = document.createElement('div');
+    div.classList.add('border', 'p-3', 'mb-3');
+    div.innerHTML = `
+        <div class="form-group">
+            <label>Tipo de Recomendación</label>
+            <select name="recommendation_type_${recommendationCount}" class="form-control">
+                <option value="Hotel">Hotel</option>
+                <option value="Excursion">Excursión</option>
+                <option value="Restaurante">Restaurante</option>
+                <option value="Lugar">Lugar</option>
+                <option value="Persona">Persona</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Comentario</label>
+            <textarea name="comment_${recommendationCount}" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Rating (1-5)</label>
+            <input type="number" name="rating_${recommendationCount}" class="form-control" min="1" max="5">
+        </div>
+        <div class="form-group">
+            <label>Contacto</label>
+            <input type="text" name="contact_${recommendationCount}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Precio aproximado</label>
+            <input type="text" name="price_${recommendationCount}" class="form-control">
+        </div>
+    `;
+
+    container.appendChild(div);
+
+    recommendationCount++;
+    document.getElementById('num_recommendations').value = recommendationCount;
+}
+</script>
+
 {% endblock %}
