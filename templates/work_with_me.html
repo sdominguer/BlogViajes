@@ -1,38 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <!-- Página "Work With Me" -->
+    <!-- Sección Work with Me -->
     <section class="work-with-me py-5">
-        <div class="container">
-            <!-- Título principal centrado -->
-            <h2 class="main-title">Work With Me</h2>
-
-            <!-- Subtítulo y tarjetas -->
-
-            <div class="collab-grid">
-                <div class="collab-card">Reseñas de productos y servicios</div>
-                <div class="collab-card">Creación de contenido patrocinado</div>
-                <div class="collab-card">Viajes de prensa</div>
-                <div class="collab-card">Embajador de marca</div>
+        <div class="container text-center">
+            <h2>Work with Me</h2>
+            <p>¡Hola! Soy [Tu Nombre], un [tu especialidad] con experiencia en [detalles de tu experiencia o industria]. He trabajado en proyectos como [nombre de algunos proyectos relevantes o áreas en las que has trabajado].</p>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='images/project1.jpg') }}" class="card-img-top" alt="Proyecto 1">
+                        <div class="card-body">
+                            <h5 class="card-title">Proyecto 1</h5>
+                            <p class="card-text">Descripción breve del proyecto y lo que lograste o aprendiste.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='images/project2.jpg') }}" class="card-img-top" alt="Proyecto 2">
+                        <div class="card-body">
+                            <h5 class="card-title">Proyecto 2</h5>
+                            <p class="card-text">Descripción breve del proyecto y lo que lograste o aprendiste.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='images/project3.jpg') }}" class="card-img-top" alt="Proyecto 3">
+                        <div class="card-body">
+                            <h5 class="card-title">Proyecto 3</h5>
+                            <p class="card-text">Descripción breve del proyecto y lo que lograste o aprendiste.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Formulario -->
-            <div class="container-form mt-5">
-                <h3 class="section-subtitle">Contact Me</h3>
-
-                {{ form.hidden_tag() }}
-                
-                {{ form.name.label(class="form-control-label") }}
-                {{ form.name(class="form-control") }}
-                
-                {{ form.email.label(class="form-control-label") }}
-                {{ form.email(class="form-control") }}
-                
-                {{ form.message.label(class="form-control-label") }}
-                {{ form.message(class="form-control", rows="5") }}
-                
-                {{ form.submit(class="btn btn-primary") }}
-            </div>
+            <p class="mt-4">Si te interesa colaborar o saber más sobre mi trabajo, ¡no dudes en ponerte en contacto conmigo!</p>
+            <a href="{{ url_for('contact') }}" class="btn btn-primary">Contactame</a>
         </div>
     </section>
+
 {% endblock %}

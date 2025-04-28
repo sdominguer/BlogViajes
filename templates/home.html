@@ -25,73 +25,68 @@
                 {% if posts %}
                     {% for post in posts %}
                         <div class="col-md-4">
-                            <div class="card">
+                            <div class="card mb-4">
                                 <img src="{{ url_for('static', filename='post_images/' + post.image_file) }}" class="card-img-top" alt="Imagen del Post">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ post.title }}</h5>
-                                    <p class="card-text">{{ post.content }}</p>
+                                    <p class="card-text">{{ post.content[:150] }}...</p>  <!-- Muestra solo los primeros 150 caracteres -->
+                                    <p class="card-text"><small class="text-muted">{{ post.date_posted.strftime('%d/%m/%Y') }}</small></p>
+
+                                    <!-- Botón Leer más -->
+                                    <a href="{{ url_for('post_detail', post_id=post.id) }}" class="btn btn-primary">Leer más</a>
                                 </div>
                             </div>
                         </div>
                     {% endfor %}
                 {% else %}
-                    
-                        ¡No hay posts!
-                    
+                    ¡No hay posts!
                 {% endif %}
             </div>
         </div>
     </section>
 
     <!-- Sección de Estadísticas de Viaje -->
-<section class="travel-stats py-5">
-    <div class="container">
-        <div class="row text-center">
-            <div class="col-md-3">
-                <div class="stat">
-                    <span class="stat-number">98</span>
-                    <span class="stat-label">Countries Visited</span>
+    <section class="travel-stats py-5">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <div class="stat">
+                        <span class="stat-number">98</span>
+                        <span class="stat-label">Countries Visited</span>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat">
-                    <span class="stat-number">7</span>
-                    <span class="stat-label">Continents Visited</span>
+                <div class="col-md-3">
+                    <div class="stat">
+                        <span class="stat-number">7</span>
+                        <span class="stat-label">Continents Visited</span>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat">
-                    <span class="stat-number">8</span>
-                    <span class="stat-label">Torn Pairs of Shoes</span>
+                <div class="col-md-3">
+                    <div class="stat">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">Torn Pairs of Shoes</span>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat">
-                    <span class="stat-number">2</span>
-                    <span class="stat-label">Lost Backpacks</span>
+                <div class="col-md-3">
+                    <div class="stat">
+                        <span class="stat-number">2</span>
+                        <span class="stat-label">Lost Backpacks</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-</section>
-
-</section>
+    </section>
 
     <!-- Sección del Mapa de Países Visitados -->
     <section class="visited-countries py-5">
         <div class="container">
             <h2>Países Visitados</h2>
             <div class="flourish-embed flourish-map" data-src="visualisation/22529016">
-            <script src="https://public.flourish.studio/resources/embed.js"></script>
-            <noscript><img src="https://public.flourish.studio/visualisation/22529016/thumbnail" width="100%" alt="map visualization" /></noscript>
+                <script src="https://public.flourish.studio/resources/embed.js"></script>
+                <noscript><img src="https://public.flourish.studio/visualisation/22529016/thumbnail" width="100%" alt="map visualization" /></noscript>
             </div>
             <p class="mt-3">¡He explorado estos increíbles lugares!</p>
         </div>
     </section>
-
-
-
 
 {% endblock %}

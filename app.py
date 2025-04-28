@@ -18,13 +18,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'  # Archivo de la bas
 
 app.config['UPLOAD_FOLDER'] = 'static/post_images'
 
-# Config de los Emails
+# Configuración de Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'correo@gmail.com'  # Aquí tu correo
-app.config['MAIL_PASSWORD'] = 'contra'  # Aquí tu contraseña.
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'anasofiacasrpo@gmail.com'         # PON AQUÍ TU CORREO
+app.config['MAIL_PASSWORD'] = 'tu_contraseña_de_aplicacion' # CONTRASEÑA DE APP, no tu password normal
+app.config['MAIL_DEFAULT_SENDER'] = 'anasofiacasrpo@gmail.com'
+
+mail = Mail(app)
 
 db = SQLAlchemy(app)  # Se declara la base de datos
 mail = Mail(app)  # Se declara Email
@@ -98,24 +100,36 @@ def index():
 def about():
     return render_template('about.html')  # Renderiza el template about.html
 
-@app.route('/work', methods=["GET", "POST"])
-def work_with_me():
-    form = ContactForm()
-    if request.method == 'POST':
-        if form.validate_on_submit:
-            name = request.form['name']
-            email = request.form['email']
-            message = request.form['message']
-            msg = Message("Hola, el usuario:" + name + " Te ha contactado: " + email, sender=email, recipients=['tuEmail@gmail.com'])  # Aquí tu correo
-            msg.body = message
-            mail.send(msg)
-            flash('El formulario fue enviado con éxito')
-            return redirect(url_for('index'))
-    else:
-        flash('El formulario tiene problemas, revisa los campos')
-        return render_template('work_with_me.html', form=form)
 
-    return render_template('work_with_me.html', form=form)
+
+# Ruta para la página "Work with Me"
+@app.route('/work_with_me', methods=['GET'])
+def work_with_me():
+    return render_template('work_with_me.html')  # Solo muestra la página, no es necesario manejar formularios aquí
+
+# Ruta para la página de Contacto
+@app.route("/contact", methods=["GET", "POST"])
+def contact():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
+        
+        # Crear el mensaje
+        msg = Message('Nuevo mensaje de colaboración',
+                      recipients=['anasofiacasrpo@gmail.com'])  # A dónde quieres recibir el mensaje
+        msg.body = f"Nombre: {name}\nCorreo: {email}\nMensaje:\n{message}"
+        
+        try:
+            # Enviar el mensaje
+            mail.send(msg)
+            flash('Tu mensaje ha sido enviado con éxito', 'success')
+            return redirect(url_for('contact'))  # Redirige de vuelta al formulario de contacto con un mensaje de éxito
+        except Exception as e:
+            print(str(e))
+            flash('Error al enviar el mensaje. Intenta de nuevo más tarde.', 'danger')
+    
+    return render_template("contact.html")
 
 # Ruta para el login del administrador
 @app.route('/admin_login', methods=['GET', 'POST'])

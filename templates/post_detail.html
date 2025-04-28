@@ -18,7 +18,12 @@
                         <p><strong>Comentario:</strong> {{ rec.comment }}</p>
                         <p><strong>Contacto:</strong> {{ rec.contact }}</p>
                         <p><strong>Precio:</strong> {{ rec.price }}</p>
-                        <p><strong>Calificación:</strong> {{ rec.rating }}</p>
+                        <p><strong>Calificación:</strong>
+                            {% for i in range(rec.rating|int) %}
+                                ⭐
+                            {% endfor %}
+                        </p>
+                        
                     </div>
                 </div>
             {% else %}
