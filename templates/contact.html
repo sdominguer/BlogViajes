@@ -1,23 +1,30 @@
 {% extends 'base.html' %}
 
-{% block content %}
-    <div class="container py-5">
-        <h2>Contact Me</h2>
-        <form method="POST">
-            <div class="form-group">
-                <label for="name">Nombre:</label>
-                <input type="text" id="name" name="name" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Correo:</label>
-                <input type="email" id="email" name="email" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="message">Mensaje:</label>
-                <textarea id="message" name="message" class="form-control" rows="4" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Enviar</button>
-        </form>
+{% block title %}Contact Me{% endblock %}
 
-    </div>
+{% block content %}
+    <!-- Página "Contact Me" -->
+    <section class="page py-5">
+        <h2>Contact Me</h2>
+        <hr class="title-divider">
+        <div class="container">
+            <div class="d-flex justify-content-center">
+                <form method="POST" style="width: 100%; max-width: 600px; text-align: left;">
+                    <div class="form-group">
+                        <label for="name" class="text-left">Nombre:</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="text-left">Correo:</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" class="text-left">Mensaje:</label>
+                        <textarea id="message" name="message" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </section>
 {% endblock %}

@@ -549,3 +549,27 @@ En este caso le quito el fondo, ya que tiene los estilos
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
+
+.title-divider {
+    width: 250px;
+    border: 0px solid #000; /* O el color que uses */
+    margin: 20px auto; /* Para centrarla debajo del título */
+}
+
+    /* Tamaño del ícono */
+    .planet-icon {
+        width: 80px; /* Ajustar tamaño del planeta */
+        height: auto;
+        animation: jump 1.5s ease-in-out infinite; /* Animación de salto */
+        filter: grayscale(100%); /* Cambia el color a gris */
+    }
+
+    /* Definición de la animación */
+    @keyframes jump {
+        0%, 100% {
+            transform: translateY(0); /* Posición inicial */
+        }
+        50% {
+            transform: translateY(-15px); /* Altura máxima del salto */
+        }
+    }

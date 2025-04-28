@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 
+{% block title %}Work with Me{% endblock %}
+
 {% block content %}
-    <!-- Sección Work with Me -->
-    <section class="work-with-me py-5">
-        <div class="container text-center">
-            <h2>Work with Me</h2>
-            <p>¡Hola! Soy [Tu Nombre], un [tu especialidad] con experiencia en [detalles de tu experiencia o industria]. He trabajado en proyectos como [nombre de algunos proyectos relevantes o áreas en las que has trabajado].</p>
-            
+    <!-- Página "Work with Me" -->
+    <section class="page py-5">
+        <h2>Work with Me</h2>
+        <hr class="title-divider">
+        <div class="container">
+            <div class="text-center mb-5">
+                <p>¡Hola! Soy [Tu Nombre], un [tu especialidad] con experiencia en [detalles de tu experiencia o industria]. He trabajado en proyectos como [nombre de algunos proyectos relevantes o áreas en las que has trabajado].</p>
+            </div>
+
             <div class="row">
                 <div class="col-md-4">
                     <div class="card">
@@ -37,9 +42,10 @@
                 </div>
             </div>
 
-            <p class="mt-4">Si te interesa colaborar o saber más sobre mi trabajo, ¡no dudes en ponerte en contacto conmigo!</p>
-            <a href="{{ url_for('contact') }}" class="btn btn-primary">Contactame</a>
+            <div class="text-center mt-5">
+                <p>Si te interesa colaborar o saber más sobre mi trabajo, ¡no dudes en ponerte en contacto conmigo!</p>
+                <a href="{{ url_for('contact') }}" class="btn btn-primary">Contáctame</a>
+            </div>
         </div>
     </section>
-
 {% endblock %}
