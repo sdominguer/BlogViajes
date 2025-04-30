@@ -94,12 +94,38 @@ def save_picture(form_picture):
 @app.route('/')
 def index():
     posts = Post.query.order_by(Post.date_posted.desc()).limit(6).all()
-    return render_template('home.html', posts=posts)
+
+    galeria_root = os.path.join(app.static_folder, 'galeria')
+    paises = []
+
+    for pais in os.listdir(galeria_root):
+        path_pais = os.path.join(galeria_root, pais)
+        if os.path.isdir(path_pais):
+            imagenes = sorted([img for img in os.listdir(path_pais) if img.lower().endswith(('.jpg', '.jpeg', '.png', '.webp'))])
+            if imagenes:
+                paises.append({
+                    'nombre': pais,
+                    'imagen_destacada': f'galeria/{pais}/{imagenes[0]}'
+                })
+
+    return render_template('home.html', posts=posts, paises=paises)
 
 @app.route('/about')
 def about():
     return render_template('about.html')  # Renderiza el template about.html
 
+@app.route('/galeria/<pais>')
+def galeria_pais(pais):
+    path_pais = os.path.join(app.static_folder, 'galeria', pais)
+    if not os.path.isdir(path_pais):
+        abort(404)
+
+    imagenes = sorted([
+        f'galeria/{pais}/{img}' for img in os.listdir(path_pais)
+        if img.lower().endswith(('.jpg', '.jpeg', '.png', '.webp'))
+    ])
+
+    return render_template('galeria_pais.html', pais=pais, imagenes=imagenes)
 
 
 # Ruta para la página "Work with Me"
