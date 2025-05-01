@@ -3,49 +3,93 @@
 {% block title %}Work with Me{% endblock %}
 
 {% block content %}
-    <!-- Página "Work with Me" -->
-    <section class="page py-5">
-        <h2>Work with Me</h2>
-        <hr class="title-divider">
-        <div class="container">
-            <div class="text-center mb-5">
-                <p>¡Hola! Soy [Tu Nombre], un [tu especialidad] con experiencia en [detalles de tu experiencia o industria]. He trabajado en proyectos como [nombre de algunos proyectos relevantes o áreas en las que has trabajado].</p>
-            </div>
+<section class="page py-5">
+    <div class="container">
+        <!-- Introducción -->
+        <div class="text-center mb-5">
+            <h2>Work with Me</h2>
+            <hr class="title-divider">
+            <p>¡Hola! Soy Ana Sofía, una creadora de contenido digital con una comunidad activa de <strong>150K seguidores en Instagram</strong> y <strong>42.2K en TikTok</strong>. Me especializo en lifestyle, moda y viajes, y he colaborado con múltiples marcas para crear campañas auténticas y visualmente atractivas.</p>
+        </div>
 
+        <!-- Proyectos recientes -->
+        <div class="mb-5">
+            <h3 class="text-center mb-4">Recent Work</h3>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="{{ url_for('static', filename='images/project1.jpg') }}" class="card-img-top" alt="Proyecto 1">
-                        <div class="card-body">
-                            <h5 class="card-title">Proyecto 1</h5>
-                            <p class="card-text">Descripción breve del proyecto y lo que lograste o aprendiste.</p>
+                {% set projects = [
+                    "MARSHALL’S BEACH",
+                    "TZAMPOC RESORT",
+                    "VLOG NYC",
+                    "4TH JULY MIAMI",
+                    "OUTFIT CHECK",
+                    "FARMATODO",
+                    "BDAY OUTFIT",
+                    "PÉRCIMON ORIGEN"
+                ] %}
+                {% for project in projects %}
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="card h-100">
+                        <img src="{{ url_for('static', filename='images/projects/' ~ project|lower|replace(' ', '_') ~ '.jpg') }}" class="card-img-top" alt="{{ project }}">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ project }}</h5>
+                            <p class="card-text text-muted">Breve descripción del proyecto.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="{{ url_for('static', filename='images/project2.jpg') }}" class="card-img-top" alt="Proyecto 2">
-                        <div class="card-body">
-                            <h5 class="card-title">Proyecto 2</h5>
-                            <p class="card-text">Descripción breve del proyecto y lo que lograste o aprendiste.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="{{ url_for('static', filename='images/project3.jpg') }}" class="card-img-top" alt="Proyecto 3">
-                        <div class="card-body">
-                            <h5 class="card-title">Proyecto 3</h5>
-                            <p class="card-text">Descripción breve del proyecto y lo que lograste o aprendiste.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-5">
-                <p>Si te interesa colaborar o saber más sobre mi trabajo, ¡no dudes en ponerte en contacto conmigo!</p>
-                <a href="{{ url_for('contact') }}" class="btn btn-primary">Contáctame</a>
+                {% endfor %}
             </div>
         </div>
-    </section>
+
+        <!-- Marcas colaboradoras -->
+        <div class="mt-5">
+            <h3 class="text-center mb-4">Brands I've Worked With</h3>
+            <div class="row justify-content-center">
+                {% set brands = [
+                    {'name': "CASA CANDELA", 'logo': 'casacandela.webp'},
+                    {'name': "PENTAWATER LOS ÁNGELES", 'logo': 'penta.jpg'},
+                    {'name': "STRAWBERRY MOON MIAMI", 'logo': 'strawberry.jpg'},
+                    {'name': "BELISARIO", 'logo': 'belisario.png'},
+                    {'name': "BRETAÑA", 'logo': 'bretaña.jpg'},
+                    {'name': "DERMAPAU", 'logo': 'derma.png'},
+                    {'name': "FLASHY", 'logo': 'flashy.webp'},
+                    {'name': "ANTIPODA HOTEL", 'logo': 'antipoda.png'},
+                    {'name': "SIN MENTE", 'logo': 'sinmente.png'},
+                    {'name': "ANANDA HOTEL CARTAGENA", 'logo': 'amanda.jpg'},
+                    {'name': "LILI PINK", 'logo': 'lilipink.jpg'},
+                    {'name': "FARMATODO", 'logo': 'farmatodo-1.jpg'},
+                    {'name': "PÉRCIMON", 'logo': 'percimon_logo.jpg'},
+                    {'name': "TZAMPOC GUATEMALA", 'logo': 'hotelG.jpg'}
+                ] %}
+
+                {% for brand in brands %}
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4 text-center">
+                    <div class="d-flex flex-column align-items-center">
+                        <div style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; background: #f7f7f7; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                            <img src="{{ url_for('static', filename='images/logos/' ~ brand.logo) }}" alt="{{ brand.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>                        
+                        <p class="mt-2 small">{{ brand.name }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Gadgets disponibles -->
+        <div class="mt-5 text-center">
+            <h3 class="mb-4">Gadgets I Use</h3>
+            <ul class="list-inline">
+                <li class="list-inline-item mx-3"><i class="fas fa-camera"></i> DJI Osmo Pocket 3</li>
+                <li class="list-inline-item mx-3"><i class="fas fa-camera-retro"></i> Canon G7X Mark III</li>
+                <li class="list-inline-item mx-3"><i class="fas fa-microphone"></i> DJI Microphone</li>
+                <li class="list-inline-item mx-3"><i class="fas fa-helicopter"></i> DJI Mini 3 Drone</li>
+            </ul>
+        </div>
+
+        <!-- Llamado a la acción -->
+        <div class="text-center mt-5">
+            <p>Si te interesa colaborar o saber más sobre mi trabajo, ¡no dudes en ponerte en contacto conmigo!</p>
+            <a href="{{ url_for('contact') }}" class="btn btn-primary">Contáctame</a>
+        </div>
+    </div>
+</section>
 {% endblock %}
