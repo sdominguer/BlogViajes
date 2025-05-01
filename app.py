@@ -10,6 +10,8 @@ import secrets
 from flask_mail import Mail, Message
 from sqlalchemy.orm import relationship
 from werkzeug.utils import secure_filename
+import smtplib
+from email.mime.text import MIMEText
 
 
 app = Flask(__name__)
@@ -33,6 +35,10 @@ mail = Mail(app)  # Se declara Email
 app.app_context().push()  # Se crea el entorno de la base de datos
 
 # Modelos
+
+class Subscriber(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -114,6 +120,33 @@ def index():
 def about():
     return render_template('about.html')  # Renderiza el template about.html
 
+# Ruta para suscripción
+@app.route('/subscribe', methods=['POST'])
+def subscribe():
+    email = request.form['email']
+    if Subscriber.query.filter_by(email=email).first():
+        flash('You are already subscribed.', 'info')
+    else:
+        new_subscriber = Subscriber(email=email)
+        db.session.add(new_subscriber)
+        db.session.commit()
+        flash('Thanks for subscribing!', 'success')
+    return redirect('/')
+
+# Función para enviar correos
+def send_email(to, subject, body):
+    sender = 'tucorreo@gmail.com'
+    password = 'tu_contraseña_de_aplicacion'
+    
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = sender
+    msg['To'] = to
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(sender, password)
+        smtp.send_message(msg)
+
 @app.route('/galeria/<pais>')
 def galeria_pais(pais):
     path_pais = os.path.join(app.static_folder, 'galeria', pais)
@@ -182,44 +215,81 @@ def logout():
     flash('Has cerrado sesión correctamente', 'info')
     return redirect(url_for('index'))  # Redirige al índice
 
-# Ruta para crear un nuevo post
+
+
+#Ruta para crear un nuevo post
+
+from flask_mail import Message
+
 @app.route('/post/new', methods=['GET', 'POST'])
 def create_post():
-    if 'admin_logged_in' not in session:  # Verifica si el admin está logueado
+    if 'admin_logged_in' not in session:
         flash('Necesitas iniciar sesión para crear un post', 'danger')
         return redirect(url_for('admin_login'))
 
     form = PostForm()
     if form.validate_on_submit():
-        picture_file = "default.jpg"  # Valor predeterminado si no se sube una imagen
+        picture_file = "default.jpg"
         if form.image_file.data:
             picture_file = save_picture(form.image_file.data)
 
         post = Post(title=form.title.data, content=form.content.data, image_file=picture_file)
-        
-        # Procesar las recomendaciones
-        num_recommendations = int(request.form.get('num_recommendations', 0))  # Obtener el número de recomendaciones desde el formulario
+
+        num_recommendations = int(request.form.get('num_recommendations', 0))
         for i in range(num_recommendations):
             recommendation_type = request.form.get(f'recommendation_type_{i}')
             comment = request.form.get(f'comment_{i}')
             rating = request.form.get(f'rating_{i}')
             contact = request.form.get(f'contact_{i}')
             price = request.form.get(f'price_{i}')
-            
-            recommendation = Recommendation(post=post, 
-                                            recommendation_type=recommendation_type, 
-                                            comment=comment, 
-                                            rating=rating, 
-                                            contact=contact, 
-                                            price=price)
+
+            recommendation = Recommendation(
+                post=post,
+                recommendation_type=recommendation_type,
+                comment=comment,
+                rating=rating,
+                contact=contact,
+                price=price
+            )
             db.session.add(recommendation)
 
         db.session.add(post)
         db.session.commit()
+
+        # Enviar correos a los suscriptores
+        subject = "¡Nuevo post en Trail & Tales!"
+        body = f"""
+Hola viajero/a 👋
+
+¡Un nuevo post ha sido publicado en Trail & Tales! 🌍
+
+📌 Título: {post.title}
+
+✨ Descubre las últimas recomendaciones de viaje, secretos de ruta y tips para tu próxima aventura.
+
+Puedes leerlo aquí:
+👉 http://localhost:5000/blog  (actualízalo con tu dominio real cuando publiques)
+
+Gracias por ser parte de esta comunidad viajera 💌
+
+Con cariño,
+Ana Sofía 🌸
+"""
+
+        # Obtener todos los suscriptores
+        subscribers = Subscriber.query.all()
+        for subscriber in subscribers:
+            try:
+                msg = Message(subject, recipients=[subscriber.email], body=body)
+                mail.send(msg)
+            except Exception as e:
+                print(f"Error al enviar correo a {subscriber.email}: {e}")
+
         flash('Post creado exitosamente', 'success')
-        return redirect(url_for('index'))  # Redirige a la página principal
+        return redirect(url_for('index'))
 
     return render_template('create_post.html', form=form, tipos_recomendacion=tipos_recomendacion)
+
 
 # Ruta para editar un post
 @app.route("/post/<int:post_id>/edit", methods=['GET', 'POST'])
@@ -296,4 +366,7 @@ def post_detail(post_id):
 
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
+

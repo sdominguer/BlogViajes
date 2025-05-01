@@ -71,23 +71,20 @@
             </ul>
           </div>
     
-          <!-- Formulario -->
-          <div class="col-md-5 mb-4">
-            <p class="mb-3">Subscribe here and get the latest travel tips<br>and my insider secrets!</p>
-            <form>
-              <div class="mb-3">
-                <label for="email" class="form-label">Email *</label>
-                <input type="email" class="form-control bg-dark text-light border-light" id="email" placeholder="Enter your email">
-              </div>
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="subscribe">
-                <label class="form-check-label" for="subscribe">
-                  Yes, subscribe me to your newsletter
-                </label>
-              </div>
-              <button type="submit" class="btn btn-brown text-black">Subscribe</button>
-            </form>
-    
+          <form method="POST" action="/subscribe">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email *</label>
+              <input type="email" name="email" class="form-control bg-dark text-light border-light" id="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="subscribe" required>
+              <label class="form-check-label" for="subscribe">
+                Yes, subscribe me to your newsletter
+              </label>
+            </div>
+            <button type="submit" class="btn btn-brown text-black">Subscribe</button>
+          </form>
+          
             <!-- Apps y contacto -->
             <div class="mt-4">
               <p class="mb-2">Connect with me:</p>
