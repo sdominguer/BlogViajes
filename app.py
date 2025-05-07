@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_wtf import FlaskForm
@@ -84,7 +84,7 @@ class PostForm(FlaskForm):
     title = StringField('Título', validators=[DataRequired()])
     content = TextAreaField('Contenido', validators=[DataRequired()])
     image_file = FileField('Imagen del Post', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
-    submit = SubmitField('Crear Post')
+    submit = SubmitField('Guardar Post')
 
 # Función para guardar imágenes
 def save_picture(form_picture):
@@ -197,16 +197,22 @@ def admin_login():
         return redirect(url_for('create_post'))
 
     form = AdminLoginForm()
+    next_page = request.args.get('next', '')  # Obtener la página a la que redirigir después del login
+
     if form.validate_on_submit():
         if form.password.data == 'tu_clave_admin':  # Aquí defines la clave de administrador
             session['admin_logged_in'] = True  # Guardamos el estado de login en la sesión
             flash('Has iniciado sesión correctamente', 'success')
-            return redirect(url_for('create_post'))  # Redirige al formulario para crear post
+            
+            # Redirigir a la página solicitada o a crear post si no hay redirección
+            if next_page:
+                return redirect(next_page)
+            return redirect(url_for('create_post'))
         else:
             flash('Clave incorrecta. Intenta de nuevo.', 'danger')
-            return redirect(url_for('admin_login'))
+            return redirect(url_for('admin_login', next=next_page))
 
-    return render_template('admin_login.html', form=form)
+    return render_template('admin_login.html', form=form, next_page=next_page)
 
 # Ruta para salir del login (cerrar sesión)
 @app.route('/logout')
@@ -225,7 +231,7 @@ from flask_mail import Message
 def create_post():
     if 'admin_logged_in' not in session:
         flash('Necesitas iniciar sesión para crear un post', 'danger')
-        return redirect(url_for('admin_login'))
+        return redirect(url_for('admin_login', next=url_for('create_post')))
 
     form = PostForm()
     if form.validate_on_submit():
@@ -291,9 +297,14 @@ Ana Sofía 🌸
     return render_template('create_post.html', form=form, tipos_recomendacion=tipos_recomendacion)
 
 
-# Ruta para editar un post
+# Ruta para editar un post - ahora con protección de contraseña
 @app.route("/post/<int:post_id>/edit", methods=['GET', 'POST'])
 def edit_post(post_id):
+    # Verifica si el usuario está logueado como administrador
+    if 'admin_logged_in' not in session:
+        flash('Necesitas iniciar sesión para editar un post', 'danger')
+        return redirect(url_for('admin_login', next=url_for('edit_post', post_id=post_id)))
+    
     post = Post.query.get_or_404(post_id)
     form = PostForm()
 
@@ -305,14 +316,11 @@ def edit_post(post_id):
         # Si se subió una nueva imagen
         if form.image_file.data:
             # Guardar la nueva imagen
-            image_file = form.image_file.data
-            filename = secure_filename(image_file.filename)
-            image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            image_file.save(image_path)
-            post.image_file = filename
+            picture_file = save_picture(form.image_file.data)
+            post.image_file = picture_file
 
         # Actualizar cada recomendación existente
-        for idx, recommendation in enumerate(post.recommendations, start=1):
+        for idx, recommendation in enumerate(post.recommendations, start=0):
             recommendation.recommendation_type = request.form.get(f'recommendation_type_{idx}')
             recommendation.comment = request.form.get(f'comment_{idx}')
             recommendation.rating = int(request.form.get(f'rating_{idx}', 1))
@@ -341,18 +349,18 @@ def edit_post(post_id):
 
     return render_template('edit_post.html', form=form, post=post)
 
-# Ruta para eliminar un post
-@app.route('/post/<int:post_id>/delete', methods=['POST'])
+@app.route('/post/delete/<int:post_id>', methods=['POST'])
 def delete_post(post_id):
-    if 'admin_logged_in' not in session:  # Verifica si el admin está logueado
+    if 'admin_logged_in' not in session:
         flash('Necesitas iniciar sesión para eliminar un post', 'danger')
-        return redirect(url_for('admin_login'))
+        return redirect(url_for('admin_login', next=url_for('post_detail', post_id=post_id)))
 
     post = Post.query.get_or_404(post_id)
+
     db.session.delete(post)
     db.session.commit()
-    flash('Post eliminado exitosamente', 'success')
-    return redirect(url_for('index'))  # Redirige a la página principal
+    flash('El post ha sido eliminado correctamente.', 'success')
+    return redirect(url_for('blog'))  # Redirige a la página de blog
 
 @app.route('/blog')
 def blog():
@@ -369,4 +377,3 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-
